@@ -7,21 +7,12 @@ import { ThemeProvider } from "styled-components";
 import { GlobalStyles } from "./themes/globalStyles";
 import themes from "./themes/schema.json";
 import AuthContext from "./contexts/AuthContext";
-import { fetchCurrentUser } from "./api/auth";
+import Navbar from "./components/Navbar";
 
 function App() {
   const [user, setUser] = useState<any>();
   const [fetchingUser, setFetchingUser] = useState(false);
   const [selectedTheme, setSelectedTheme] = useState(themes.light);
-
-  useEffect(() => {
-    setUser(
-      fetchCurrentUser(
-        setFetchingUser,
-        localStorage.getItem("localToken") as any
-      ).then((user) => user)
-    );
-  }, []);
 
   return (
     <AuthContext.Provider
@@ -29,6 +20,7 @@ function App() {
     >
       <ThemeProvider theme={selectedTheme}>
         <GlobalStyles />
+        <Navbar />
         <Routes>
           <Route path="/" element={<Homepage />} />
           <Route path="/login" element={<Login />} />

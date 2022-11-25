@@ -5,9 +5,9 @@ export const GlobalStyles = createGlobalStyle`
     overflow-x:hidden;
     background: ${({ theme }) => {
       if (theme.name === "light") {
-        return "url('/images/skyline.jpg')";
+        return "#e8e8e8";
       } else {
-        return "url('/images/skyline-dark.jpg')";
+        return "#292929";
       }
     }};
     background-position: center;

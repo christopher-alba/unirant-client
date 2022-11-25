@@ -8,33 +8,53 @@ export const fetchCurrentUser = async (
   localToken: string
 ) => {
   setFetchingUser(true);
-  const response: AxiosResponse = await axios.post(
-    originURL + "/api/v1/getuser",
-    {
-      localToken,
-    },
-    {
-      withCredentials: true,
-    }
-  );
-  const data = response.data;
-  return data;
+  try {
+    const response: AxiosResponse = await axios.post(
+      originURL + "/api/v1/getuser",
+      {
+        localToken,
+      },
+      {
+        withCredentials: true,
+      }
+    );
+    setFetchingUser(false);
+    const data = response.data;
+    return data;
+  } catch (err: any) {
+    return err.message;
+  }
 };
 
 export const login = async (userData: {
   username: string;
   password: string;
 }) => {
-  const response: AxiosResponse = await axios.post(
-    originURL + "/api/v1/auth/default/login",
-    userData,
-    {
-      withCredentials: true,
-    }
-  );
-  localStorage.setItem("localToken", response.data);
-  const data = response.data;
-  return data;
+  type ReturnObject = {
+    loggedIn: boolean;
+    message: string;
+  };
+  try {
+    const response: AxiosResponse = await axios.post(
+      originURL + "/api/v1/auth/default/login",
+      userData,
+      {
+        withCredentials: true,
+      }
+    );
+    localStorage.setItem("localToken", response.data);
+    const data: ReturnObject = {
+      loggedIn: true,
+      message: "User login was successful.",
+    };
+    return data;
+  } catch (err: any) {
+    const data: ReturnObject = {
+      loggedIn: false,
+      message: err.message,
+    };
+    return data;
+  }
 };
 
 export const register = async (userData: {
@@ -45,6 +65,18 @@ export const register = async (userData: {
   const response: AxiosResponse = await axios.post(
     originURL + "/api/v1/auth/default/register",
     userData
+  );
+  const data = response.data;
+  return data;
+};
+
+export const logout = async (userId: string) => {
+  const response: AxiosResponse = await axios.post(
+    originURL + "/api/v1/auth/logout",
+    userId,
+    {
+      withCredentials: true,
+    }
   );
   const data = response.data;
   return data;
