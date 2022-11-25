@@ -1,19 +1,42 @@
-import React, { Dispatch, FC, SetStateAction, useContext } from "react";
+import React, {
+  Dispatch,
+  FC,
+  SetStateAction,
+  useContext,
+  useState,
+} from "react";
 import { Link } from "react-router-dom";
+import { Container, Dropdown } from "semantic-ui-react";
+import Button from "semantic-ui-react/dist/commonjs/elements/Button";
+import Icon from "semantic-ui-react/dist/commonjs/elements/Icon";
 import { DefaultTheme, ThemeContext } from "styled-components";
 import { logout } from "../../api/auth";
 import AuthContext from "../../contexts/AuthContext";
 import themes from "../../themes/schema.json";
+import {
+  Brand,
+  InnerDiv,
+  NavbarMainDiv,
+  NavContentWrapper,
+  StyledLink,
+  ThemeButton,
+  StyledImg,
+  DropdownButton,
+  DropdownIconDiv,
+  DropdownMenu,
+} from "./styled";
 
 const Navbar: FC<{
   setSelectedTheme: Dispatch<SetStateAction<DefaultTheme>>;
 }> = ({ setSelectedTheme }) => {
+  const [dropdownState, setDropdownState] = useState(false);
   const { user, setUser, fetchingUser } = useContext(AuthContext);
   const theme = useContext(ThemeContext);
   const handleLogout = async () => {
     await logout(user?._id as any);
     localStorage.removeItem("localToken");
     setUser(undefined);
+    setDropdownState(false);
   };
   const toggleThemeChange = () => {
     if (theme.name === "light") {
@@ -22,23 +45,121 @@ const Navbar: FC<{
       setSelectedTheme(themes.light);
     }
   };
+  const toggleDropdownMenu = () => {
+    setDropdownState(!dropdownState);
+  };
   return (
-    <div>
-      {fetchingUser && <p>Fetching User...</p>}
-      <button onClick={toggleThemeChange}>Toggle Theme</button>
-      {user?._id ? (
-        <div>
-          <Link to="/">Home</Link>
-          <button onClick={handleLogout}>Logout</button>
-        </div>
-      ) : (
-        <div>
-          <Link to="/">Home</Link>
-          <Link to="/register">Register</Link>
-          <Link to="/login">Login</Link>
-        </div>
-      )}
-    </div>
+    <NavbarMainDiv>
+      <Container>
+        <InnerDiv>
+          <NavContentWrapper>
+            <Brand>Unirant</Brand>
+            {user?._id ? (
+              <>
+                <StyledLink to="/">
+                  <Icon name="home" /> Trending
+                </StyledLink>
+                <StyledLink to="/feed">
+                  <Icon name="feed" /> Feed
+                </StyledLink>
+                <StyledLink to="/communities">
+                  <Icon name="users" /> Communities
+                </StyledLink>
+              </>
+            ) : (
+              <StyledLink to="/">
+                <Icon name="home" /> Trending
+              </StyledLink>
+            )}
+          </NavContentWrapper>
+          <NavContentWrapper>
+            <ThemeButton onClick={toggleThemeChange}>Toggle Theme</ThemeButton>
+            {fetchingUser ? (
+              <span>Fetching User...</span>
+            ) : user?._id ? (
+              <div
+                style={{
+                  position: "relative",
+                  display: "flex",
+                  alignItems: "center",
+                }}
+              >
+                <Dropdown search selection placeholder="Your Communities" />
+                <DropdownButton tabIndex={0} onClick={toggleDropdownMenu}>
+                  <StyledImg
+                    src={
+                      user.profilePicture ||
+                      "https://www.business2community.com/wp-content/uploads/2017/08/blank-profile-picture-973460_640.png"
+                    }
+                    alt="profilePic"
+                    referrerPolicy="no-referrer"
+                  />
+                  {user.displayName}
+                  <DropdownIconDiv>
+                    <Icon
+                      name={dropdownState ? "chevron up" : "chevron down"}
+                    />
+                  </DropdownIconDiv>
+                </DropdownButton>
+                {dropdownState && (
+                  <DropdownMenu>
+                    <Link to="/profile">
+                      <Button
+                        basic
+                        icon
+                        fluid
+                        inverted={theme.name === "light"}
+                        tabIndex={-1}
+                        labelPosition="left"
+                      >
+                        <Icon name="user" />
+                        Profile
+                      </Button>
+                    </Link>
+                    <Link to="/settings">
+                      <Button
+                        basic
+                        icon
+                        fluid
+                        inverted={theme.name === "light"}
+                        tabIndex={-1}
+                        labelPosition="left"
+                      >
+                        <Icon name="settings" />
+                        Settings
+                      </Button>
+                    </Link>
+                    <Button
+                      icon
+                      fluid
+                      basic
+                      inverted={theme.name === "light"}
+                      onClick={handleLogout}
+                      labelPosition="left"
+                    >
+                      <Icon name="log out" />
+                      Logout
+                    </Button>
+                  </DropdownMenu>
+                )}
+              </div>
+            ) : (
+              <Button.Group>
+                <Link to="/login">
+                  <Button tabIndex={-1}>Login</Button>
+                </Link>
+                <Button.Or text="OR" />
+                <Link to="/register">
+                  <Button tabIndex={-1} primary>
+                    Register
+                  </Button>
+                </Link>
+              </Button.Group>
+            )}
+          </NavContentWrapper>
+        </InnerDiv>
+      </Container>
+    </NavbarMainDiv>
   );
 };
 

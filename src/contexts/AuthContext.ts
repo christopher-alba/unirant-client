@@ -3,7 +3,9 @@ import React, { Dispatch, SetStateAction } from "react";
 export type UserInfo = {
   _id: string;
   username: string;
-  googleId?: string;
+  displayName: string;
+  email: string;
+  profilePicture: string;
 };
 
 type AuthContextType = {

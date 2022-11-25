@@ -9,7 +9,7 @@ export const GlobalStyles = createGlobalStyle`
       } else {
         return "#292929";
       }
-    }};
+    }} !important;
     background-position: center;
     background-repeat: no-repeat;
     background-size: cover;
