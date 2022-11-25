@@ -1,45 +1,41 @@
-import React, { useEffect, useState } from "react";
-import logo from "./logo.svg";
-import "./App.css";
-import axios, { AxiosResponse } from "axios";
+import { useEffect, useState } from "react";
+import { Routes, Route } from "react-router-dom";
+import Homepage from "./pages/Homepage";
+import Login from "./pages/Login";
+import Register from "./pages/Register";
+import { ThemeProvider } from "styled-components";
+import { GlobalStyles } from "./themes/globalStyles";
+import themes from "./themes/schema.json";
+import AuthContext from "./contexts/AuthContext";
+import { fetchCurrentUser } from "./api/auth";
 
 function App() {
-  const [userObject, setUserObject] = useState<any>();
+  const [user, setUser] = useState<any>();
+  const [fetchingUser, setFetchingUser] = useState(false);
+  const [selectedTheme, setSelectedTheme] = useState(themes.light);
 
   useEffect(() => {
-    axios
-      .get("http://localhost:5000/api/v1/getuser", {
-        withCredentials: true,
-      })
-      .then((res: AxiosResponse) => {
-        console.log(res);
-        if (res.data) {
-          setUserObject(res.data);
-        }
-      });
+    setUser(
+      fetchCurrentUser(
+        setFetchingUser,
+        localStorage.getItem("localToken") as any
+      ).then((user) => user)
+    );
   }, []);
-  const googleLogin = () => {
-    window.open("http://localhost:5000/api/v1/auth/google", "_self");
-  };
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <button onClick={googleLogin}>Login with google</button>
-        <h2>Welcome {userObject?.username}</h2>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <AuthContext.Provider
+      value={{ user, setUser, fetchingUser, setFetchingUser }}
+    >
+      <ThemeProvider theme={selectedTheme}>
+        <GlobalStyles />
+        <Routes>
+          <Route path="/" element={<Homepage />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/register" element={<Register />} />
+        </Routes>
+      </ThemeProvider>
+    </AuthContext.Provider>
   );
 }
 
