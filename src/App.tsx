@@ -12,7 +12,7 @@ import Navbar from "./components/Navbar";
 function App() {
   const [user, setUser] = useState<any>();
   const [fetchingUser, setFetchingUser] = useState(false);
-  const [selectedTheme, setSelectedTheme] = useState(themes.dark);
+  const [selectedTheme, setSelectedTheme] = useState(themes.light);
 
   return (
     <AuthContext.Provider
@@ -20,7 +20,7 @@ function App() {
     >
       <ThemeProvider theme={selectedTheme}>
         <GlobalStyles />
-        <Navbar />
+        <Navbar setSelectedTheme={setSelectedTheme} />
         <Routes>
           <Route path="/" element={<Homepage />} />
           <Route path="/login" element={<Login />} />
