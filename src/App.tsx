@@ -12,7 +12,7 @@ import Navbar from "./components/Navbar";
 function App() {
   const [user, setUser] = useState<any>();
   const [fetchingUser, setFetchingUser] = useState(false);
-  const [selectedTheme, setSelectedTheme] = useState(themes.light);
+  const [selectedTheme, setSelectedTheme] = useState(themes.dark);
 
   return (
     <AuthContext.Provider

@@ -22,6 +22,7 @@ export const fetchCurrentUser = async (
     const data = response.data;
     return data;
   } catch (err: any) {
+    setFetchingUser(false);
     return err.message;
   }
 };
