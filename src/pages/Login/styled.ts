@@ -36,6 +36,9 @@ export const InnerDiv = styled("div")`
 export const FormContentsWrapper = styled("div")`
   display: flex;
   flex-direction: column;
+  & > * {
+    margin-top: 10px !important;
+  }
 `;
 
 export const LoginLeftDiv = styled("div")`
@@ -57,3 +60,10 @@ export const StyledPRight = styled("p")`
   color: white;
   font-size: 1.5rem;
 `;
+
+export const StyledPLeft = styled("p")`
+  color: ${({ theme }) => theme.colors.secondary};
+  font-size: 0.8rem;
+  margin-bottom: 0;
+`;
+

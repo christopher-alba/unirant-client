@@ -1,7 +1,7 @@
 import { Formik, FormikHelpers } from "formik";
 import React, { FC, useContext, useState } from "react";
-import { Link } from "react-router-dom";
-import { Button } from "semantic-ui-react";
+import { Link, useNavigate } from "react-router-dom";
+import { Button, Icon, Message } from "semantic-ui-react";
 import { ThemeContext } from "styled-components";
 import { fetchCurrentUser, login } from "../../api/auth";
 import { originURL } from "../../api/origin";
@@ -15,6 +15,7 @@ import {
   StyledHeadingLeft,
   StyledHeadingRight,
   StyledInput,
+  StyledPLeft,
   StyledPRight,
 } from "./styled";
 
@@ -23,6 +24,7 @@ const Login: FC = () => {
   const [error, setError] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const { setUser, setFetchingUser } = useContext(AuthContext);
+  const navigate = useNavigate();
   const theme = useContext(ThemeContext);
   const googleLogin = () => {
     window.open(originURL + "/api/v1/auth/google", "_self");
@@ -49,6 +51,11 @@ const Login: FC = () => {
     setMessage(response.message);
     if (!response.loggedIn) {
       setError(true);
+    } else {
+      setTimeout(() => {
+        setMessage("");
+        navigate("/");
+      }, 1000);
     }
     setTimeout(() => {
       setMessage("");
@@ -68,6 +75,9 @@ const Login: FC = () => {
     }
     return errors;
   };
+  const toggleShowPW = () => {
+    setShowPassword(!showPassword);
+  };
   return (
     <MainDiv>
       <InnerDiv>
@@ -76,7 +86,11 @@ const Login: FC = () => {
             initialValues={initialValues}
             validate={validate}
             onSubmit={async (values, { setSubmitting }) => {
-              defaultLogin(values.username, values.password, setSubmitting);
+              await defaultLogin(
+                values.username,
+                values.password,
+                setSubmitting
+              );
             }}
           >
             {({
@@ -88,21 +102,69 @@ const Login: FC = () => {
               handleSubmit,
               isSubmitting,
             }) => (
-              <form>
+              <form onSubmit={handleSubmit}>
                 <FormContentsWrapper>
                   <StyledHeadingLeft>Login</StyledHeadingLeft>
-                  <StyledInput type="text" />
-                  <StyledInput
-                    type={showPassword ? "text" : "password"}
-                    action={{
-                      icon: "eye",
-                      
-                    }}
-                  />
-                  <Button fluid primary type="submit">
+                  <Button
+                    color="google plus"
+                    type="button"
+                    icon
+                    fluid
+                    onClick={googleLogin}
+                    labelPosition="right"
+                  >
+                    Login with Google
+                    <Icon name="google" />
+                  </Button>
+                  <div>
+                    <StyledPLeft>Username</StyledPLeft>
+                    <StyledInput
+                      fluid
+                      name="username"
+                      type="text"
+                      onChange={handleChange}
+                      onBlur={handleBlur}
+                      value={values.username}
+                    />
+                  </div>
+                  <div>
+                    <StyledPLeft>Password</StyledPLeft>
+                    <StyledInput
+                      fluid
+                      name="password"
+                      type={showPassword ? "text" : "password"}
+                      onChange={handleChange}
+                      onBlur={handleBlur}
+                      value={values.password}
+                    />
+                  </div>
+
+                  <Button
+                    fluid
+                    color={theme.name === "light" ? "black" : undefined}
+                    size="tiny"
+                    type="button"
+                    icon
+                    labelPosition="left"
+                    onClick={toggleShowPW}
+                  >
+                    <Icon name={showPassword ? "eye slash" : "eye"} />
+                    {showPassword ? "hide password" : "show password"}
+                  </Button>
+                  <Button fluid primary type="submit" disabled={isSubmitting}>
                     Login
                   </Button>
                 </FormContentsWrapper>
+                {message.length > 0 ? (
+                  <Message
+                    info={isSubmitting}
+                    negative={error}
+                    success={!isSubmitting && !error}
+                    content={message}
+                  />
+                ) : (
+                  ""
+                )}
               </form>
             )}
           </Formik>
