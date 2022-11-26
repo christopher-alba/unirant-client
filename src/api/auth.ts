@@ -52,7 +52,7 @@ export const login = async (userData: {
   } catch (err: any) {
     const data: ReturnObject = {
       loggedIn: false,
-      message: err.message,
+      message: err.response.data,
     };
     return data;
   }
@@ -63,12 +63,28 @@ export const register = async (userData: {
   email: string;
   password: string;
 }) => {
-  const response: AxiosResponse = await axios.post(
-    originURL + "/api/v1/auth/default/register",
-    userData
-  );
-  const data = response.data;
-  return data;
+  type ReturnObjectRegister = {
+    registered: boolean;
+    message: string;
+  };
+  try {
+    const response: AxiosResponse = await axios.post(
+      originURL + "/api/v1/auth/default/register",
+      userData
+    );
+    const data: ReturnObjectRegister = {
+      registered: true,
+      message: "Your account has been successfully registered with Unirant.",
+    };
+    return data;
+  } catch (err: any) {
+    console.log(err);
+    const data: ReturnObjectRegister = {
+      registered: false,
+      message: err.response.data,
+    };
+    return data;
+  }
 };
 
 export const logout = async (userId: string) => {
