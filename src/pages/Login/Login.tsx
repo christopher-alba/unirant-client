@@ -1,22 +1,40 @@
+import { Formik, FormikHelpers } from "formik";
 import React, { FC, useContext, useState } from "react";
+import { Link } from "react-router-dom";
+import { Button } from "semantic-ui-react";
+import { ThemeContext } from "styled-components";
 import { fetchCurrentUser, login } from "../../api/auth";
 import { originURL } from "../../api/origin";
 import AuthContext from "../../contexts/AuthContext";
+import {
+  FormContentsWrapper,
+  InnerDiv,
+  LoginLeftDiv,
+  LoginRightDiv,
+  MainDiv,
+  StyledHeadingLeft,
+  StyledHeadingRight,
+  StyledInput,
+  StyledPRight,
+} from "./styled";
 
 const Login: FC = () => {
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
-  const [loggingIn, setLoggingIn] = useState(false);
   const [message, setMessage] = useState("");
   const [error, setError] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
   const { setUser, setFetchingUser } = useContext(AuthContext);
+  const theme = useContext(ThemeContext);
   const googleLogin = () => {
     window.open(originURL + "/api/v1/auth/google", "_self");
   };
-  const defaultLogin = async () => {
+  const defaultLogin = async (
+    username: string,
+    password: string,
+    setSubmitting: any
+  ) => {
     setError(false);
     setMessage("Verifying user details.");
-    setLoggingIn(true);
+    setSubmitting(true);
     const response = await login({
       username,
       password,
@@ -27,7 +45,7 @@ const Login: FC = () => {
         localStorage.getItem("localToken") as any
       )
     );
-    setLoggingIn(false);
+    setSubmitting(false);
     setMessage(response.message);
     if (!response.loggedIn) {
       setError(true);
@@ -36,35 +54,73 @@ const Login: FC = () => {
       setMessage("");
     }, 5000);
   };
-  const handleUsernameChange = (evt: React.ChangeEvent<HTMLInputElement>) => {
-    setUsername(evt.target.value);
+  const initialValues = {
+    username: "",
+    password: "",
   };
-  const handlePasswordChange = (evt: React.ChangeEvent<HTMLInputElement>) => {
-    setPassword(evt.target.value);
+  const validate = (values: { username: string; password: string }) => {
+    const errors = {};
+    if (!values.username) {
+      (errors as any).username = "Required";
+    }
+    if (!values.password) {
+      (errors as any).password = "Required";
+    }
+    return errors;
   };
   return (
-    <>
-      <h1>Login</h1>
-      <button onClick={googleLogin}>Login with Google</button>
-      <p>Username</p>
-      <input
-        type="text"
-        placeholder="enter username"
-        onChange={handleUsernameChange}
-      />
-      <p>Password</p>
-      <input
-        type="password"
-        placeholder="enter password"
-        onChange={handlePasswordChange}
-      />
-      <button onClick={defaultLogin}>Login</button>
-      {message.length > 0 && (
-        <p style={{ color: loggingIn ? "blue" : error ? "red" : "green" }}>
-          {message}
-        </p>
-      )}
-    </>
+    <MainDiv>
+      <InnerDiv>
+        <LoginLeftDiv>
+          <Formik
+            initialValues={initialValues}
+            validate={validate}
+            onSubmit={async (values, { setSubmitting }) => {
+              defaultLogin(values.username, values.password, setSubmitting);
+            }}
+          >
+            {({
+              values,
+              errors,
+              touched,
+              handleChange,
+              handleBlur,
+              handleSubmit,
+              isSubmitting,
+            }) => (
+              <form>
+                <FormContentsWrapper>
+                  <StyledHeadingLeft>Login</StyledHeadingLeft>
+                  <StyledInput type="text" />
+                  <StyledInput
+                    type={showPassword ? "text" : "password"}
+                    action={{
+                      icon: "eye",
+                      
+                    }}
+                  />
+                  <Button fluid primary type="submit">
+                    Login
+                  </Button>
+                </FormContentsWrapper>
+              </form>
+            )}
+          </Formik>
+        </LoginLeftDiv>
+        <LoginRightDiv>
+          <StyledHeadingRight>Havn't Registered?</StyledHeadingRight>
+          <StyledPRight>
+            Don't worry! Log in using your Google account or you can register
+            below with Unirant.
+          </StyledPRight>
+          <Link to="/register">
+            <Button color={theme.name === "light" ? undefined : "black"}>
+              Register
+            </Button>
+          </Link>
+        </LoginRightDiv>
+      </InnerDiv>
+    </MainDiv>
   );
 };
 

@@ -3,6 +3,7 @@ import { createGlobalStyle } from "styled-components";
 export const GlobalStyles = createGlobalStyle`
   body {
     overflow-x:hidden;
+    height: 100vh;
     background: ${({ theme }) => {
       if (theme.name === "light") {
         return "#e8e8e8";
