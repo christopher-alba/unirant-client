@@ -88,6 +88,7 @@ export const register = async (userData: {
 };
 
 export const logout = async (userId: string) => {
+  console.log("LOGGING OUT USER");
   const response: AxiosResponse = await axios.post(
     originURL + "/api/v1/auth/logout",
     userId,

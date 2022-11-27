@@ -1,9 +1,9 @@
 import { Formik, FormikHelpers } from "formik";
-import React, { FC, useContext, useState } from "react";
+import React, { FC, useContext, useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Button, Icon, Message } from "semantic-ui-react";
 import { ThemeContext } from "styled-components";
-import { fetchCurrentUser, login } from "../../api/auth";
+import { fetchCurrentUser, login, logout } from "../../api/auth";
 import { originURL } from "../../api/origin";
 import AuthContext from "../../contexts/AuthContext";
 import {
@@ -23,9 +23,21 @@ const Login: FC = () => {
   const [message, setMessage] = useState("");
   const [error, setError] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
-  const { setUser, setFetchingUser } = useContext(AuthContext);
+  const { user, setUser, setFetchingUser } = useContext(AuthContext);
   const navigate = useNavigate();
   const theme = useContext(ThemeContext);
+
+  useEffect(() => {
+    handleLogout();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [user]);
+  const handleLogout = async () => {
+    if (user) {
+      await logout(user?._id as any);
+    }
+    localStorage.removeItem("localToken");
+    setUser(undefined);
+  };
   const googleLogin = () => {
     window.open(originURL + "/api/v1/auth/google", "_self");
   };
@@ -41,19 +53,19 @@ const Login: FC = () => {
       username,
       password,
     });
-    setUser(
-      await fetchCurrentUser(
-        setFetchingUser,
-        localStorage.getItem("localToken") as any
-      )
-    );
     setSubmitting(false);
     setMessage(response.message);
     if (!response.loggedIn) {
       setError(true);
     } else {
-      setTimeout(() => {
+      setTimeout(async () => {
         setMessage("");
+        setUser(
+          await fetchCurrentUser(
+            setFetchingUser,
+            localStorage.getItem("localToken") as any
+          )
+        );
         navigate("/");
       }, 1000);
     }

@@ -1,10 +1,11 @@
 import { Formik } from "formik";
-import React, { FC, useContext, useState } from "react";
+import React, { FC, useContext, useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Button, Icon, Message } from "semantic-ui-react";
 import { ThemeContext } from "styled-components";
-import { register } from "../../api/auth";
+import { logout, register } from "../../api/auth";
 import { originURL } from "../../api/origin";
+import AuthContext from "../../contexts/AuthContext";
 import {
   FormContentsWrapper,
   InnerDiv,
@@ -23,7 +24,20 @@ const Register: FC = () => {
   const [error, setError] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const theme = useContext(ThemeContext);
+  const { user, setUser } = useContext(AuthContext);
   const navigate = useNavigate();
+  useEffect(() => {
+    handleLogout();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [user]);
+  const handleLogout = async () => {
+    if (user) {
+      await logout(user?._id as any);
+    }
+    localStorage.removeItem("localToken");
+    setUser(undefined);
+  };
+
   const googleLogin = () => {
     window.open(originURL + "/api/v1/auth/google", "_self");
   };
