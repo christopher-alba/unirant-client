@@ -31,11 +31,12 @@ const Register: FC = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user]);
   const handleLogout = async () => {
-    if (user) {
-      await logout(user?._id as any);
-    }
     localStorage.removeItem("localToken");
-    setUser(undefined);
+    if (user?._id) {
+      console.log(user._id);
+      await logout(user?._id as any);
+      setUser(undefined);
+    }
   };
 
   const googleLogin = () => {

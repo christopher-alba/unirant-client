@@ -1,4 +1,4 @@
-import { Formik, FormikHelpers } from "formik";
+import { Formik } from "formik";
 import React, { FC, useContext, useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Button, Icon, Message } from "semantic-ui-react";
@@ -32,11 +32,13 @@ const Login: FC = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user]);
   const handleLogout = async () => {
-    if (user) {
-      await logout(user?._id as any);
-    }
     localStorage.removeItem("localToken");
-    setUser(undefined);
+    console.log("handling logout");
+    if (user?._id) {
+      console.log(user._id);
+      await logout(user?._id as any);
+      setUser(undefined);
+    }
   };
   const googleLogin = () => {
     window.open(originURL + "/api/v1/auth/google", "_self");
