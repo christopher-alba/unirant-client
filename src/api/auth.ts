@@ -27,6 +27,24 @@ export const fetchCurrentUser = async (
   }
 };
 
+export const fetchCurrentUserInWrapper = async (localToken: string) => {
+  try {
+    const response: AxiosResponse = await axios.post(
+      originURL + "/api/v1/getuser",
+      {
+        localToken,
+      },
+      {
+        withCredentials: true,
+      }
+    );
+    const data = response.data;
+    return data;
+  } catch (err: any) {
+    return err.message;
+  }
+};
+
 export const login = async (userData: {
   username: string;
   password: string;

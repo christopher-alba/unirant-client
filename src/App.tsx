@@ -10,6 +10,9 @@ import AuthContext from "./contexts/AuthContext";
 import Navbar from "./components/Navbar";
 import "semantic-ui-css/semantic.min.css";
 import { fetchCurrentUser } from "./api/auth";
+import AuthWrapper from "./components/AuthWrapper";
+import Profile from "./pages/Profile";
+import { Container } from "semantic-ui-react";
 
 function App() {
   const [user, setUser] = useState<any>();
@@ -36,11 +39,21 @@ function App() {
       <ThemeProvider theme={selectedTheme}>
         <GlobalStyles />
         <Navbar setSelectedTheme={setSelectedTheme} />
-        <Routes>
-          <Route path="/" element={<Homepage />} />
-          <Route path="/login" element={<Login />} />
-          <Route path="/register" element={<Register />} />
-        </Routes>
+        <Container>
+          <Routes>
+            <Route path="/" element={<Homepage />} />
+            <Route path="/login" element={<Login />} />
+            <Route path="/register" element={<Register />} />
+            <Route
+              path="/profile"
+              element={
+                <AuthWrapper>
+                  <Profile />
+                </AuthWrapper>
+              }
+            />
+          </Routes>
+        </Container>
       </ThemeProvider>
     </AuthContext.Provider>
   );
