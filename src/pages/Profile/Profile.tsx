@@ -19,7 +19,7 @@ const Profile: FC = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user]);
 
-  if (!fetchingProfile) {
+  if (fetchingProfile) {
     return (
       <Segment>
         Fetching Profile...
