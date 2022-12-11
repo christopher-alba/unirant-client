@@ -13,23 +13,26 @@ import { fetchCurrentUser } from "./api/auth";
 import AuthWrapper from "./components/AuthWrapper";
 import Profile from "./pages/Profile";
 import { Container } from "semantic-ui-react";
+import { useAuth0 } from "@auth0/auth0-react";
 
 function App() {
   const [user, setUser] = useState<any>();
   const [fetchingUser, setFetchingUser] = useState(false);
   const [selectedTheme, setSelectedTheme] = useState(themes.light);
+  const { getAccessTokenSilently, user: auth0user, isLoading } = useAuth0();
   useEffect(() => {
-    fetchUser();
+    if (!isLoading) {
+      fetchUser();
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [user]);
+  }, [user, isLoading]);
   const fetchUser = async () => {
     if (!user) {
-      setUser(
-        await fetchCurrentUser(
-          setFetchingUser,
-          localStorage.getItem("localToken") as any
-        )
+      const token = await getAccessTokenSilently().catch((err) =>
+        console.log(err)
       );
+
+      setUser(await fetchCurrentUser(setFetchingUser, token, auth0user));
     }
   };
   return (

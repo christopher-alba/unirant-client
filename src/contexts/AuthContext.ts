@@ -6,6 +6,7 @@ export type UserInfo = {
   displayName: string;
   email: string;
   profilePicture: string;
+  emailVerified: boolean;
 };
 
 type AuthContextType = {

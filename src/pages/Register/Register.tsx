@@ -3,7 +3,6 @@ import React, { FC, useContext, useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Button, Icon, Message } from "semantic-ui-react";
 import { ThemeContext } from "styled-components";
-import { logout, register } from "../../api/auth";
 import { originURL } from "../../api/origin";
 import AuthContext from "../../contexts/AuthContext";
 import {
@@ -24,52 +23,40 @@ const Register: FC = () => {
   const [error, setError] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const theme = useContext(ThemeContext);
-  const { user, setUser } = useContext(AuthContext);
+
   const navigate = useNavigate();
-  useEffect(() => {
-    handleLogout();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [user]);
-  const handleLogout = async () => {
-    localStorage.removeItem("localToken");
-    if (user?._id) {
-      console.log(user._id);
-      await logout(user?._id as any);
-      setUser(undefined);
-    }
-  };
 
   const googleLogin = () => {
     window.open(originURL + "/api/v1/auth/google", "_self");
   };
-  const defaultRegister = async (
-    username: string,
-    email: string,
-    password: string,
-    setSubmitting: any
-  ) => {
-    setError(false);
-    setSubmitting(true);
-    setMessage("Attempting to register an account.");
-    const response = await register({
-      username,
-      email,
-      password,
-    });
-    setSubmitting(false);
-    setMessage(response.message);
-    if (!response.registered) {
-      setError(true);
-    } else {
-      setTimeout(() => {
-        setMessage("");
-        navigate("/login");
-      }, 1000);
-    }
-    setTimeout(() => {
-      setMessage("");
-    }, 5000);
-  };
+  // const defaultRegister = async (
+  //   username: string,
+  //   email: string,
+  //   password: string,
+  //   setSubmitting: any
+  // ) => {
+  //   setError(false);
+  //   setSubmitting(true);
+  //   setMessage("Attempting to register an account.");
+  //   const response = await register({
+  //     username,
+  //     email,
+  //     password,
+  //   });
+  //   setSubmitting(false);
+  //   setMessage(response.message);
+  //   if (!response.registered) {
+  //     setError(true);
+  //   } else {
+  //     setTimeout(() => {
+  //       setMessage("");
+  //       navigate("/login");
+  //     }, 1000);
+  //   }
+  //   setTimeout(() => {
+  //     setMessage("");
+  //   }, 5000);
+  // };
   const initialValues = {
     username: "",
     email: "",
@@ -103,12 +90,12 @@ const Register: FC = () => {
             initialValues={initialValues}
             validate={validate}
             onSubmit={async (values, { setSubmitting }) => {
-              await defaultRegister(
-                values.username,
-                values.email,
-                values.password,
-                setSubmitting
-              );
+              // await defaultRegister(
+              //   values.username,
+              //   values.email,
+              //   values.password,
+              //   setSubmitting
+              // );
             }}
           >
             {({

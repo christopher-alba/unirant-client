@@ -1,9 +1,10 @@
+import { useAuth0 } from "@auth0/auth0-react";
 import { Formik } from "formik";
 import React, { FC, useContext, useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Button, Icon, Message } from "semantic-ui-react";
 import { ThemeContext } from "styled-components";
-import { fetchCurrentUser, login, logout } from "../../api/auth";
+import { fetchCurrentUser } from "../../api/auth";
 import { originURL } from "../../api/origin";
 import AuthContext from "../../contexts/AuthContext";
 import {
@@ -23,58 +24,47 @@ const Login: FC = () => {
   const [message, setMessage] = useState("");
   const [error, setError] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
-  const { user, setUser, setFetchingUser } = useContext(AuthContext);
+  const { setUser, setFetchingUser } = useContext(AuthContext);
   const navigate = useNavigate();
   const theme = useContext(ThemeContext);
-
-  useEffect(() => {
-    handleLogout();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [user]);
-  const handleLogout = async () => {
-    localStorage.removeItem("localToken");
-    console.log("handling logout");
-    if (user?._id) {
-      console.log(user._id);
-      await logout(user?._id as any);
-      setUser(undefined);
-    }
-  };
-  const googleLogin = () => {
-    window.open(originURL + "/api/v1/auth/google", "_self");
-  };
-  const defaultLogin = async (
-    username: string,
-    password: string,
-    setSubmitting: any
-  ) => {
-    setError(false);
-    setMessage("Verifying user details.");
-    setSubmitting(true);
-    const response = await login({
-      username,
-      password,
+  const { loginWithRedirect } = useAuth0();
+  const auth0Login = () => {
+    loginWithRedirect({
+      prompt: "login",
     });
-    setSubmitting(false);
-    setMessage(response.message);
-    if (!response.loggedIn) {
-      setError(true);
-    } else {
-      setTimeout(async () => {
-        setMessage("");
-        setUser(
-          await fetchCurrentUser(
-            setFetchingUser,
-            localStorage.getItem("localToken") as any
-          )
-        );
-        navigate("/");
-      }, 1000);
-    }
-    setTimeout(() => {
-      setMessage("");
-    }, 5000);
   };
+  // const defaultLogin = async (
+  //   username: string,
+  //   password: string,
+  //   setSubmitting: any
+  // ) => {
+  //   setError(false);
+  //   setMessage("Verifying user details.");
+  //   setSubmitting(true);
+  //   const response = await login({
+  //     username,
+  //     password,
+  //   });
+  //   setSubmitting(false);
+  //   setMessage(response.message);
+  //   if (!response.loggedIn) {
+  //     setError(true);
+  //   } else {
+  //     setTimeout(async () => {
+  //       setMessage("");
+  //       setUser(
+  //         await fetchCurrentUser(
+  //           setFetchingUser,
+  //           localStorage.getItem("localToken") as any
+  //         )
+  //       );
+  //       navigate("/");
+  //     }, 1000);
+  //   }
+  //   setTimeout(() => {
+  //     setMessage("");
+  //   }, 5000);
+  // };
   const initialValues = {
     username: "",
     password: "",
@@ -100,11 +90,11 @@ const Login: FC = () => {
             initialValues={initialValues}
             validate={validate}
             onSubmit={async (values, { setSubmitting }) => {
-              await defaultLogin(
-                values.username,
-                values.password,
-                setSubmitting
-              );
+              // await defaultLogin(
+              //   values.username,
+              //   values.password,
+              //   setSubmitting
+              // );
             }}
           >
             {({
@@ -124,7 +114,7 @@ const Login: FC = () => {
                     type="button"
                     icon
                     fluid
-                    onClick={googleLogin}
+                    onClick={auth0Login}
                     labelPosition="right"
                   >
                     Login with Google
