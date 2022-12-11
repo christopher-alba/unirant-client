@@ -10,7 +10,7 @@ import { Container, Dropdown } from "semantic-ui-react";
 import Button from "semantic-ui-react/dist/commonjs/elements/Button";
 import Icon from "semantic-ui-react/dist/commonjs/elements/Icon";
 import { DefaultTheme, ThemeContext } from "styled-components";
-import { logout } from "../../api/auth";
+import { originURL } from "../../api/origin";
 import AuthContext from "../../contexts/AuthContext";
 import themes from "../../themes/schema.json";
 import {
@@ -25,6 +25,7 @@ import {
   DropdownIconDiv,
   DropdownMenu,
 } from "./styled";
+import { useAuth0 } from "@auth0/auth0-react";
 
 const Navbar: FC<{
   setSelectedTheme: Dispatch<SetStateAction<DefaultTheme>>;
@@ -32,9 +33,12 @@ const Navbar: FC<{
   const [dropdownState, setDropdownState] = useState(false);
   const { user, setUser, fetchingUser } = useContext(AuthContext);
   const theme = useContext(ThemeContext);
+  const { logout: clientLogout, isAuthenticated } = useAuth0();
   const handleLogout = async () => {
-    await logout(user?._id as any);
-    localStorage.removeItem("localToken");
+    clientLogout({
+      returnTo: window.location.origin,
+    });
+
     setUser(undefined);
     setDropdownState(false);
   };
@@ -76,7 +80,7 @@ const Navbar: FC<{
             <ThemeButton onClick={toggleThemeChange}>Toggle Theme</ThemeButton>
             {fetchingUser ? (
               <span>Fetching User...</span>
-            ) : user?._id ? (
+            ) : isAuthenticated ? (
               <div
                 style={{
                   position: "relative",
@@ -88,13 +92,13 @@ const Navbar: FC<{
                 <DropdownButton tabIndex={0} onClick={toggleDropdownMenu}>
                   <StyledImg
                     src={
-                      user.profilePicture ||
+                      user?.profilePicture ||
                       "https://www.business2community.com/wp-content/uploads/2017/08/blank-profile-picture-973460_640.png"
                     }
                     alt="profilePic"
                     referrerPolicy="no-referrer"
                   />
-                  {user.displayName}
+                  {user?.displayName}
                   <DropdownIconDiv>
                     <Icon
                       name={dropdownState ? "chevron up" : "chevron down"}
