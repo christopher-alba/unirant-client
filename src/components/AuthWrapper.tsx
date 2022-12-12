@@ -1,8 +1,6 @@
 import { useAuth0 } from "@auth0/auth0-react";
-import React, { FC, useContext, useEffect, useState } from "react";
+import React, { FC } from "react";
 import { Navigate } from "react-router-dom";
-import { fetchCurrentUserInWrapper } from "../api/auth";
-import AuthContext, { UserInfo } from "../contexts/AuthContext";
 
 const AuthWrapper: FC<{ children: JSX.Element }> = ({ children }) => {
   const { user: auth0user, isLoading } = useAuth0();

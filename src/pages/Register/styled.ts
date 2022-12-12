@@ -69,3 +69,4 @@ export const StyledPLeft = styled("p")`
   font-size: 0.8rem;
   margin-bottom: 0;
 `;
+export const SubHeadingLeft = styled("h2")``;

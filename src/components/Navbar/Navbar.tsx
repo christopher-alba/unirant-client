@@ -10,7 +10,6 @@ import { Container, Dropdown } from "semantic-ui-react";
 import Button from "semantic-ui-react/dist/commonjs/elements/Button";
 import Icon from "semantic-ui-react/dist/commonjs/elements/Icon";
 import { DefaultTheme, ThemeContext } from "styled-components";
-import { originURL } from "../../api/origin";
 import AuthContext from "../../contexts/AuthContext";
 import themes from "../../themes/schema.json";
 import {
