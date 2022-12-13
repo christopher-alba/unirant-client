@@ -14,6 +14,7 @@ import AuthWrapper from "./components/AuthWrapper";
 import Profile from "./pages/Profile";
 import { Container } from "semantic-ui-react";
 import { useAuth0 } from "@auth0/auth0-react";
+import EditProfile from "./pages/EditProfile";
 
 function App() {
   const [user, setUser] = useState<any>();
@@ -52,6 +53,14 @@ function App() {
               element={
                 <AuthWrapper>
                   <Profile />
+                </AuthWrapper>
+              }
+            />
+            <Route
+              path="/profile/edit"
+              element={
+                <AuthWrapper>
+                  <EditProfile />
                 </AuthWrapper>
               }
             />
