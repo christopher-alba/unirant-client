@@ -99,9 +99,7 @@ const Navbar: FC<{
                   />
                   {user?.displayName}
                   <DropdownIconDiv>
-                    <Icon
-                      name={dropdownState ? "chevron up" : "chevron down"}
-                    />
+                    <Icon name={dropdownState ? "caret up" : "dropdown"} />
                   </DropdownIconDiv>
                 </DropdownButton>
                 {dropdownState && (
@@ -111,7 +109,7 @@ const Navbar: FC<{
                         basic
                         icon
                         fluid
-                        inverted={theme.name === "light"}
+                        inverted={theme.name === "dark"}
                         tabIndex={-1}
                         labelPosition="left"
                       >
@@ -124,7 +122,7 @@ const Navbar: FC<{
                         basic
                         icon
                         fluid
-                        inverted={theme.name === "light"}
+                        inverted={theme.name === "dark"}
                         tabIndex={-1}
                         labelPosition="left"
                       >
@@ -136,7 +134,7 @@ const Navbar: FC<{
                       icon
                       fluid
                       basic
-                      inverted={theme.name === "light"}
+                      inverted={theme.name === "dark"}
                       onClick={handleLogout}
                       labelPosition="left"
                     >
