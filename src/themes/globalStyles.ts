@@ -1,9 +1,14 @@
 import { createGlobalStyle } from "styled-components";
 
 export const GlobalStyles = createGlobalStyle`
+
+  html, body {
+      overflow: auto;
+  }
+
   body {
+    display:flex;
     overflow-x:hidden;
-    height: 100vh;
     background: ${({ theme }) => {
       if (theme.name === "light") {
         return "#e8e8e8";

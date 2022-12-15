@@ -5,6 +5,8 @@ import styled from "styled-components";
 export const NavbarMainDiv = styled("div")`
   background: ${({ theme }) => theme.colors.primary};
   padding: 20px 0;
+  position: relative;
+  z-index: 10000;
 `;
 
 export const ThemeButton = styled(Button)`
@@ -114,4 +116,5 @@ export const DropdownMenu = styled("div")`
   }
   border-bottom-left-radius: 5px;
   border-bottom-right-radius: 5px;
+  z-index: 10000;
 `;
