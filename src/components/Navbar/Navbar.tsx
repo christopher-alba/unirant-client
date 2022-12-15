@@ -35,7 +35,7 @@ const Navbar: FC<{
   const { logout: clientLogout, isAuthenticated } = useAuth0();
   const handleLogout = async () => {
     clientLogout({
-      returnTo: window.location.origin,
+      returnTo: window.location.origin + "/login",
     });
 
     setUser(undefined);
