@@ -124,7 +124,7 @@ const Navbar: FC<{
                       value: community.name,
                       text: community.name,
                       onClick: () => {
-                        navigate("/community/" + community._id);
+                        navigate("/community?id=" + community._id);
                       },
                     } as DropdownItemProps;
                   })}
