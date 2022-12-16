@@ -1,6 +1,7 @@
 import { useAuth0 } from "@auth0/auth0-react";
 import { Formik } from "formik";
 import React, { FC, useContext, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { Button, Input, Modal } from "semantic-ui-react";
 import { fetchCurrentUserInWrapper } from "../../../api/auth";
 import { createCommunity, getAllCommunities } from "../../../api/community";
@@ -17,6 +18,7 @@ const CreateCommunityModal: FC = () => {
   const [formSubmitting, setFormSubmitting] = useState(false);
   const { getAccessTokenSilently, isLoading, user: auth0user } = useAuth0();
   const { setCommunities } = useContext(CommunityContext);
+  const navigate = useNavigate();
 
   const getBase64 = (file: File, cb: CallableFunction) => {
     if (file.size > 1 * Math.pow(10, 6)) {
@@ -35,10 +37,19 @@ const CreateCommunityModal: FC = () => {
       console.log("Error: ", error);
     };
   };
+  const handleOpen = () => {
+    setOpen(true);
+  };
+  const handleClose = () => {
+    setWallpaper("");
+    setMessage("");
+    setFormSubmitting(false);
+    setOpen(false);
+  };
   return (
     <Modal
-      onClose={() => setOpen(false)}
-      onOpen={() => setOpen(true)}
+      onClose={handleClose}
+      onOpen={handleOpen}
       open={open}
       trigger={<Button primary>Create Community</Button>}
     >
@@ -72,13 +83,18 @@ const CreateCommunityModal: FC = () => {
                 },
                 accessToken
               );
-              setCommunities(await getAllCommunities());
+              const allCommunities = await getAllCommunities();
+              setCommunities(allCommunities);
               setMessage(response);
               setUser(
                 await fetchUserProfile(user?.username as any, accessToken)
               );
               setSubmitting(false);
               setFormSubmitting(false);
+              navigate(
+                "/community?id=" +
+                  allCommunities?.[allCommunities?.length - 1]._id
+              );
             }}
           >
             {({

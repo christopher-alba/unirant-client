@@ -2,7 +2,7 @@ import React, { FC, useEffect, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import { getSpecificCommunities } from "../../api/community";
 import { MainContentCard } from "../../components/MainContentCard";
-import { StyledH1 } from "../../components/Titles";
+import { Name, Wallpaper, WallpaperWrapper } from "./styled";
 
 const Community: FC = () => {
   const [community, setCommunity] = useState<any>();
@@ -17,10 +17,12 @@ const Community: FC = () => {
     );
   };
   if (community) {
-    console.log(community);
     return (
       <MainContentCard>
-        <StyledH1>{community.name}</StyledH1>
+        <WallpaperWrapper>
+          <Name>{community.name} Community</Name>
+          <Wallpaper src={community.wallpaper} />
+        </WallpaperWrapper>
       </MainContentCard>
     );
   } else {

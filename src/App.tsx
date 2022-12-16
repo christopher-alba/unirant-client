@@ -17,7 +17,7 @@ import { useAuth0 } from "@auth0/auth0-react";
 import EditProfile from "./pages/EditProfile";
 import Communities from "./pages/Communities";
 import CommunityContext from "./contexts/CommunityContext";
-import Community from "./pages/Community/Community";
+import Community from "./pages/Community";
 
 function App() {
   const [user, setUser] = useState<any>();

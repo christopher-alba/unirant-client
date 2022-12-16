@@ -27,14 +27,12 @@ import {
 } from "./styled";
 import { useAuth0 } from "@auth0/auth0-react";
 import { getSpecificCommunities } from "../../api/community";
-import CommunityContext from "../../contexts/CommunityContext";
 
 const Navbar: FC<{
   setSelectedTheme: Dispatch<SetStateAction<DefaultTheme>>;
 }> = ({ setSelectedTheme }) => {
   const [dropdownState, setDropdownState] = useState(false);
   const { user, setUser, fetchingUser } = useContext(AuthContext);
-  const { communities } = useContext(CommunityContext);
   const [userCommunities, setUserCommunities] = useState<any>();
   const theme = useContext(ThemeContext);
   const { logout: clientLogout, isAuthenticated } = useAuth0();
@@ -44,8 +42,9 @@ const Navbar: FC<{
     if (user) {
       fetchUserCommunities();
     }
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [user, communities]);
+  }, [user]);
 
   const fetchUserCommunities = async () => {
     console.log(user);
