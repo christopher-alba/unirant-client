@@ -11,6 +11,7 @@ const EditProfile: FC = () => {
   const [message, setMessage] = useState("");
   const [fetchingProfile, setFetchingProfile] = useState(false);
   const [image, setImage] = useState(user?.profilePicture);
+  const [wallpaper, setWallpaper] = useState(user?.wallpaper);
   const { getAccessTokenSilently, isLoading } = useAuth0();
   const getBase64 = (file: File, cb: CallableFunction) => {
     if (file.size > 1 * Math.pow(10, 6)) {
@@ -23,6 +24,7 @@ const EditProfile: FC = () => {
     reader.readAsDataURL(file);
     reader.onload = function () {
       cb(reader.result);
+      setMessage("File selection successful");
     };
     reader.onerror = function (error) {
       console.log("Error: ", error);
@@ -37,6 +39,7 @@ const EditProfile: FC = () => {
       )
     );
     setImage(user?.profilePicture);
+    setWallpaper(user?.wallpaper);
     setFetchingProfile(false);
   };
   useEffect(() => {
@@ -63,6 +66,7 @@ const EditProfile: FC = () => {
         initialValues={{
           displayName: userProfile?.displayName,
           profilePicture: userProfile?.profilePicture,
+          wallpaper: userProfile?.wallpaper,
         }}
         onSubmit={async (values, { setSubmitting }) => {
           setSubmitting(true);
@@ -118,6 +122,22 @@ const EditProfile: FC = () => {
                   "https://www.business2community.com/wp-content/uploads/2017/08/blank-profile-picture-973460_640.png"
                 }
                 alt="profilePic"
+                referrerPolicy="no-referrer"
+              />
+              <input
+                type="file"
+                name="wallpaper"
+                onChange={(evt) => {
+                  const updateWallpaper = (base64: string) => {
+                    values.wallpaper = base64;
+                    setWallpaper(base64);
+                  };
+                  getBase64(evt.target.files?.[0] as any, updateWallpaper);
+                }}
+              />
+              <img
+                src={wallpaper}
+                alt="wallpaper"
                 referrerPolicy="no-referrer"
               />
               <Button type="submit" primary disabled={isSubmitting}>

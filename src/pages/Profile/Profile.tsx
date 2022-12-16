@@ -66,7 +66,7 @@ const Profile: FC = () => {
             alt="profilePic"
             referrerPolicy="no-referrer"
           />
-          <ProfileBackgroundImg src="/images/profileBackgroundDefault.png" />
+          <ProfileBackgroundImg src={userProfile?.wallpaper} />
           <ProfileBannerContentWrapper>
             <ProfileDisplayName>{userProfile?.displayName}</ProfileDisplayName>
             <Link to="/profile/edit">
