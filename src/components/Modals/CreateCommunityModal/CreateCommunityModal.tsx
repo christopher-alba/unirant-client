@@ -3,9 +3,10 @@ import { Formik } from "formik";
 import React, { FC, useContext, useState } from "react";
 import { Button, Input, Modal } from "semantic-ui-react";
 import { fetchCurrentUserInWrapper } from "../../../api/auth";
-import { createCommunity } from "../../../api/community";
+import { createCommunity, getAllCommunities } from "../../../api/community";
 import { fetchUserProfile } from "../../../api/profile";
 import AuthContext from "../../../contexts/AuthContext";
+import CommunityContext from "../../../contexts/CommunityContext";
 import { StyledImg } from "./styled";
 
 const CreateCommunityModal: FC = () => {
@@ -15,6 +16,7 @@ const CreateCommunityModal: FC = () => {
   const [message, setMessage] = useState("");
   const [formSubmitting, setFormSubmitting] = useState(false);
   const { getAccessTokenSilently, isLoading, user: auth0user } = useAuth0();
+  const { setCommunities } = useContext(CommunityContext);
 
   const getBase64 = (file: File, cb: CallableFunction) => {
     if (file.size > 1 * Math.pow(10, 6)) {
@@ -70,6 +72,7 @@ const CreateCommunityModal: FC = () => {
                 },
                 accessToken
               );
+              setCommunities(await getAllCommunities());
               setMessage(response);
               setUser(
                 await fetchUserProfile(user?.username as any, accessToken)

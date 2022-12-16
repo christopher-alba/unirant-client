@@ -16,11 +16,14 @@ import { Container } from "semantic-ui-react";
 import { useAuth0 } from "@auth0/auth0-react";
 import EditProfile from "./pages/EditProfile";
 import Communities from "./pages/Communities";
+import CommunityContext from "./contexts/CommunityContext";
 
 function App() {
   const [user, setUser] = useState<any>();
   const [fetchingUser, setFetchingUser] = useState(false);
   const [selectedTheme, setSelectedTheme] = useState(themes.light);
+  const [communities, setCommunities] = useState();
+
   const { getAccessTokenSilently, user: auth0user, isLoading } = useAuth0();
   useEffect(() => {
     if (!isLoading) {
@@ -41,34 +44,36 @@ function App() {
     <AuthContext.Provider
       value={{ user, setUser, fetchingUser, setFetchingUser }}
     >
-      <ThemeProvider theme={selectedTheme}>
-        <GlobalStyles />
-        <Navbar setSelectedTheme={setSelectedTheme} />
-        <Container style={{ height: "100%" }}>
-          <Routes>
-            <Route path="/" element={<Homepage />} />
-            <Route path="/login" element={<Login />} />
-            <Route path="/register" element={<Register />} />
-            <Route path="/communities" element={<Communities />} />
-            <Route
-              path="/profile"
-              element={
-                <AuthWrapper>
-                  <Profile />
-                </AuthWrapper>
-              }
-            />
-            <Route
-              path="/profile/edit"
-              element={
-                <AuthWrapper>
-                  <EditProfile />
-                </AuthWrapper>
-              }
-            />
-          </Routes>
-        </Container>
-      </ThemeProvider>
+      <CommunityContext.Provider value={{ communities, setCommunities }}>
+        <ThemeProvider theme={selectedTheme}>
+          <GlobalStyles />
+          <Navbar setSelectedTheme={setSelectedTheme} />
+          <Container style={{ height: "100%" }}>
+            <Routes>
+              <Route path="/" element={<Homepage />} />
+              <Route path="/login" element={<Login />} />
+              <Route path="/register" element={<Register />} />
+              <Route path="/communities" element={<Communities />} />
+              <Route
+                path="/profile"
+                element={
+                  <AuthWrapper>
+                    <Profile />
+                  </AuthWrapper>
+                }
+              />
+              <Route
+                path="/profile/edit"
+                element={
+                  <AuthWrapper>
+                    <EditProfile />
+                  </AuthWrapper>
+                }
+              />
+            </Routes>
+          </Container>
+        </ThemeProvider>
+      </CommunityContext.Provider>
     </AuthContext.Provider>
   );
 }
