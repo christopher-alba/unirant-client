@@ -15,6 +15,7 @@ import Profile from "./pages/Profile";
 import { Container } from "semantic-ui-react";
 import { useAuth0 } from "@auth0/auth0-react";
 import EditProfile from "./pages/EditProfile";
+import Communities from "./pages/Communities";
 
 function App() {
   const [user, setUser] = useState<any>();
@@ -48,6 +49,7 @@ function App() {
             <Route path="/" element={<Homepage />} />
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
+            <Route path="/communities" element={<Communities />} />
             <Route
               path="/profile"
               element={

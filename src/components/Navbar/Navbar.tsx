@@ -70,9 +70,14 @@ const Navbar: FC<{
                 </StyledLink>
               </>
             ) : (
-              <StyledLink to="/">
-                <Icon name="home" /> Trending
-              </StyledLink>
+              <>
+                <StyledLink to="/">
+                  <Icon name="home" /> Trending
+                </StyledLink>
+                <StyledLink to="/communities">
+                  <Icon name="users" /> Communities
+                </StyledLink>
+              </>
             )}
           </NavContentWrapper>
           <NavContentWrapper>

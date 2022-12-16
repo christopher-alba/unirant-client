@@ -80,6 +80,7 @@ const EditProfile: FC = () => {
           );
           setMessage(response);
           setUser(await fetchUserProfile(user?.username as any, accessToken));
+          setSubmitting(false);
         }}
       >
         {({
