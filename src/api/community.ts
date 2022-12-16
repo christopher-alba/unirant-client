@@ -44,3 +44,20 @@ export const getAllCommunities = async () => {
     return err.response.data;
   }
 };
+
+export const getSpecificCommunities = async (communitiesIDs: string[]) => {
+  try {
+    const response: AxiosResponse = await axios.post(
+      originURL + "/api/v1/community/specific",
+      { communitiesIDs },
+      {
+        withCredentials: true,
+      }
+    );
+    console.log(response);
+    return response.data;
+  } catch (err: any) {
+    console.log(err);
+    return err.response.data;
+  }
+};

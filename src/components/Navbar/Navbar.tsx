@@ -3,10 +3,11 @@ import React, {
   FC,
   SetStateAction,
   useContext,
+  useEffect,
   useState,
 } from "react";
-import { Link } from "react-router-dom";
-import { Container, Dropdown } from "semantic-ui-react";
+import { Link, useNavigate } from "react-router-dom";
+import { Container, Dropdown, DropdownItemProps } from "semantic-ui-react";
 import Button from "semantic-ui-react/dist/commonjs/elements/Button";
 import Icon from "semantic-ui-react/dist/commonjs/elements/Icon";
 import { DefaultTheme, ThemeContext } from "styled-components";
@@ -25,14 +26,36 @@ import {
   DropdownMenu,
 } from "./styled";
 import { useAuth0 } from "@auth0/auth0-react";
+import { getSpecificCommunities } from "../../api/community";
+import CommunityContext from "../../contexts/CommunityContext";
 
 const Navbar: FC<{
   setSelectedTheme: Dispatch<SetStateAction<DefaultTheme>>;
 }> = ({ setSelectedTheme }) => {
   const [dropdownState, setDropdownState] = useState(false);
   const { user, setUser, fetchingUser } = useContext(AuthContext);
+  const { communities } = useContext(CommunityContext);
+  const [userCommunities, setUserCommunities] = useState<any>();
   const theme = useContext(ThemeContext);
   const { logout: clientLogout, isAuthenticated } = useAuth0();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (user) {
+      fetchUserCommunities();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [user, communities]);
+
+  const fetchUserCommunities = async () => {
+    console.log(user);
+    const communities = await getSpecificCommunities(
+      user?.communitiesAdmin.concat(user.communitiesMember) as any
+    );
+    console.log(communities);
+    setUserCommunities(communities);
+  };
+
   const handleLogout = async () => {
     clientLogout({
       returnTo: window.location.origin + "/login",
@@ -92,7 +115,20 @@ const Navbar: FC<{
                   alignItems: "center",
                 }}
               >
-                <Dropdown search selection placeholder="Your Communities" />
+                <Dropdown
+                  search
+                  selection
+                  placeholder="Your Communities"
+                  options={userCommunities?.map((community: any) => {
+                    return {
+                      value: community.name,
+                      text: community.name,
+                      onClick: () => {
+                        navigate("/community/" + community._id);
+                      },
+                    } as DropdownItemProps;
+                  })}
+                />
                 <DropdownButton tabIndex={0} onClick={toggleDropdownMenu}>
                   <StyledImg
                     src={

@@ -8,6 +8,10 @@ export type UserInfo = {
   profilePicture: string;
   emailVerified: boolean;
   wallpaper: string;
+  communitiesMember: string[];
+  communitiesAdmin: string[];
+  posts: string[];
+  comments: string[];
 };
 
 type AuthContextType = {
