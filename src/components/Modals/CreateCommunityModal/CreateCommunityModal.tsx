@@ -8,7 +8,7 @@ import { createCommunity, getAllCommunities } from "../../../api/community";
 import { fetchUserProfile } from "../../../api/profile";
 import AuthContext from "../../../contexts/AuthContext";
 import CommunityContext from "../../../contexts/CommunityContext";
-import { StyledImg } from "./styled";
+import { StyledImg, StyledP } from "./styled";
 
 const CreateCommunityModal: FC = () => {
   const [open, setOpen] = useState(false);
@@ -91,10 +91,12 @@ const CreateCommunityModal: FC = () => {
               );
               setSubmitting(false);
               setFormSubmitting(false);
-              navigate(
-                "/community?id=" +
-                  allCommunities?.[allCommunities?.length - 1]._id
-              );
+              if (!(response as string).includes("failed")) {
+                navigate(
+                  "/community?id=" +
+                    allCommunities?.[allCommunities?.length - 1]._id
+                );
+              }
             }}
           >
             {({
@@ -144,7 +146,7 @@ const CreateCommunityModal: FC = () => {
                     alt="wallpaper"
                     referrerPolicy="no-referrer"
                   />
-                  <p>{message}</p>
+                  <StyledP>{message}</StyledP>
                 </div>
               </form>
             )}

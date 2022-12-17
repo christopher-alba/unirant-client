@@ -6,3 +6,7 @@ export const StyledImg = styled("img")`
   object-fit: cover;
   object-position: center;
 `;
+
+export const StyledP = styled("p")`
+  color: black;
+`;
