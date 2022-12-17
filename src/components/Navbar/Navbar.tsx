@@ -138,14 +138,14 @@ const Navbar: FC<{
                     return {
                       value: community.name,
                       text: (
-                        <p>
+                        <div>
                           {community.admin ? (
                             <StatusPillImportant>Admin</StatusPillImportant>
                           ) : (
                             <StatusPillBasic>Member</StatusPillBasic>
                           )}
                           {community.name}
-                        </p>
+                        </div>
                       ),
                       onClick: () => {
                         navigate("/community?id=" + community._id);

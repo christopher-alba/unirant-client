@@ -1,6 +1,6 @@
 import React, { Dispatch, SetStateAction } from "react";
 
-type Community = {
+export type Community = {
   _id: string;
   name: string;
   description?: string;

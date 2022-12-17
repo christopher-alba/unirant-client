@@ -61,3 +61,29 @@ export const getSpecificCommunities = async (communitiesIDs: string[]) => {
     return err.response.data;
   }
 };
+
+export const joinCommunity = async (
+  communityID: string,
+  userID: string,
+  token: string
+) => {
+  try {
+    const response: AxiosResponse = await axios.post(
+      originURL + "/api/v1/community/join",
+      {
+        communityID,
+        userID,
+      },
+      {
+        headers: {
+          authorization: "Bearer " + token,
+        },
+        withCredentials: true,
+      }
+    );
+    return response;
+  } catch (err: any) {
+    console.log(err);
+    return err.response.data;
+  }
+};
