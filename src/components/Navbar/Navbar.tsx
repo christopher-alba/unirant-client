@@ -7,7 +7,7 @@ import React, {
   useState,
 } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { Container, Dropdown, DropdownItemProps } from "semantic-ui-react";
+import { Container, DropdownItemProps } from "semantic-ui-react";
 import Button from "semantic-ui-react/dist/commonjs/elements/Button";
 import Icon from "semantic-ui-react/dist/commonjs/elements/Icon";
 import { DefaultTheme, ThemeContext } from "styled-components";
@@ -24,9 +24,11 @@ import {
   DropdownButton,
   DropdownIconDiv,
   DropdownMenu,
+  DropdownStyled,
 } from "./styled";
 import { useAuth0 } from "@auth0/auth0-react";
 import { getSpecificCommunities } from "../../api/community";
+import { StatusPillBasic, StatusPillImportant } from "../StatusPills";
 
 const Navbar: FC<{
   setSelectedTheme: Dispatch<SetStateAction<DefaultTheme>>;
@@ -52,7 +54,21 @@ const Navbar: FC<{
       user?.communitiesAdmin.concat(user.communitiesMember) as any
     );
     console.log(communities);
-    setUserCommunities(communities);
+    setUserCommunities(
+      communities.map((community: any) => {
+        if ((community.adminIDs as string[]).includes(user?._id as any)) {
+          return {
+            ...community,
+            admin: true,
+          };
+        } else {
+          return {
+            ...community,
+            admin: false,
+          };
+        }
+      })
+    );
   };
 
   const handleLogout = async () => {
@@ -102,8 +118,7 @@ const Navbar: FC<{
               </>
             )}
           </NavContentWrapper>
-          <NavContentWrapper>
-            <ThemeButton onClick={toggleThemeChange}>Toggle Theme</ThemeButton>
+          <NavContentWrapper style={{ justifyContent: "flex-end" }}>
             {fetchingUser ? (
               <span>Fetching User...</span>
             ) : isAuthenticated ? (
@@ -112,16 +127,26 @@ const Navbar: FC<{
                   position: "relative",
                   display: "flex",
                   alignItems: "center",
+                  width: "100%",
                 }}
               >
-                <Dropdown
-                  search
+                <DropdownStyled
+                  fluid
                   selection
                   placeholder="Your Communities"
                   options={userCommunities?.map((community: any) => {
                     return {
                       value: community.name,
-                      text: community.name,
+                      text: (
+                        <p>
+                          {community.admin ? (
+                            <StatusPillImportant>Admin</StatusPillImportant>
+                          ) : (
+                            <StatusPillBasic>Member</StatusPillBasic>
+                          )}
+                          {community.name}
+                        </p>
+                      ),
                       onClick: () => {
                         navigate("/community?id=" + community._id);
                       },
@@ -181,6 +206,9 @@ const Navbar: FC<{
                       <Icon name="log out" />
                       Logout
                     </Button>
+                    <ThemeButton onClick={toggleThemeChange}>
+                      Toggle Theme
+                    </ThemeButton>
                   </DropdownMenu>
                 )}
               </div>

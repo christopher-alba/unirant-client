@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom";
+import { Dropdown } from "semantic-ui-react";
 import Button from "semantic-ui-react/dist/commonjs/elements/Button";
 import styled from "styled-components";
 
@@ -10,6 +11,7 @@ export const NavbarMainDiv = styled("div")`
 `;
 
 export const ThemeButton = styled(Button)`
+  width: 100%;
   background: ${({ theme }) => theme.colors.secondary} !important;
   color: ${({ theme }) => theme.colors.primary} !important;
   margin-right: 10px !important;
@@ -39,6 +41,7 @@ export const Brand = styled("h1")`
 export const NavContentWrapper = styled("div")`
   display: flex;
   align-items: center;
+  flex-grow: 1;
 `;
 
 export const StyledLink = styled(Link)`
@@ -58,8 +61,11 @@ export const StyledImg = styled("img")`
 
 export const DropdownButton = styled("button")`
   display: flex;
+  justify-content: space-between;
   align-items: center;
-  height: 36px;
+  height: 46px;
+  width: 100%;
+  flex-grow: 1;
   background: transparent;
   color: ${({ theme }) => theme.colors.secondary};
   padding: 0%;
@@ -117,4 +123,54 @@ export const DropdownMenu = styled("div")`
   border-bottom-left-radius: 5px;
   border-bottom-right-radius: 5px;
   z-index: 10000;
+`;
+
+export const DropdownStyled = styled(Dropdown)`
+  color: ${({ theme }) => theme.colors.secondary} !important;
+  height: 46px;
+  display: flex !important;
+  align-items: center;
+  border-color: ${({ theme }) => {
+    if (theme.name === "light") {
+      return "rgba(34,36,38,.15)";
+    } else {
+      return "#c4ced846";
+    }
+  }} !important;
+  &:hover {
+    cursor: pointer;
+    border-color: ${({ theme }) => {
+      if (theme.name === "light") {
+        return "#0a0b0b4a";
+      } else {
+        return "#dde4eb82";
+      }
+    }} !important;
+  }
+  &:focus {
+    outline: 1px solid ${({ theme }) => theme.colors.secondary} !important;
+  }
+  background: ${({ theme }) => theme.colors.primary} !important;
+  & .divider.text > p {
+    color: ${({ theme }) => theme.colors.secondary} !important;
+    background: ${({ theme }) => theme.colors.primary} !important;
+  }
+  & .item {
+    color: ${({ theme }) => theme.colors.secondary} !important;
+    background: ${({ theme }) => theme.colors.primary} !important;
+    &:hover {
+      background: ${({ theme }) => theme.colors.primaryHover} !important;
+    }
+    border-top: 1px solid ${({ theme }) => theme.colors.primaryLight} !important;
+  }
+  & .selected.item {
+    background: ${({ theme }) => theme.colors.primaryLight} !important;
+  }
+  & .menu {
+    outline: 1px solid ${({ theme }) => theme.colors.secondary} !important;
+    border: none !important;
+  }
+  & .dropdown.icon{
+    top: 13px !important;
+  }
 `;
