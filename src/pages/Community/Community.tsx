@@ -6,6 +6,7 @@ import {
   getAllCommunities,
   getSpecificCommunities,
   joinCommunity,
+  leaveCommunity,
 } from "../../api/community";
 import AuthContext from "../../contexts/AuthContext";
 import CommunityContext, {
@@ -52,17 +53,41 @@ const Community: FC = () => {
       navigate("/login");
     }
   };
+
+  const handleLeaveCommunity = async () => {
+    if (auth0user) {
+      const token = await getAccessTokenSilently();
+      await leaveCommunity(
+        searchParams.get("id") as any,
+        user?._id as any,
+        token
+      );
+      setUser(await fetchCurrentUserInWrapper(token, auth0user));
+      await fetchCommunity();
+      setCommunities(await getAllCommunities());
+    } else {
+      navigate("/login");
+    }
+  };
   if (community) {
     return (
       <HeaderWrapper>
         <WallpaperWrapper>
           <Name>{community.name} Community</Name>
           {community.adminIDs.includes(user?._id as any) ? (
-            <StyledButton color="red" disabled={isLoading}>
+            <StyledButton
+              color="red"
+              disabled={isLoading}
+              onClick={handleLeaveCommunity}
+            >
               Leave Group
             </StyledButton>
           ) : community.memberIDs?.includes(user?._id as any) ? (
-            <StyledButton color="red" disabled={isLoading}>
+            <StyledButton
+              color="red"
+              disabled={isLoading}
+              onClick={handleLeaveCommunity}
+            >
               Leave Group
             </StyledButton>
           ) : (

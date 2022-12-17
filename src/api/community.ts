@@ -87,3 +87,28 @@ export const joinCommunity = async (
     return err.response.data;
   }
 };
+export const leaveCommunity = async (
+  communityID: string,
+  userID: string,
+  token: string
+) => {
+  try {
+    const response: AxiosResponse = await axios.post(
+      originURL + "/api/v1/community/leave",
+      {
+        communityID,
+        userID,
+      },
+      {
+        headers: {
+          authorization: "Bearer " + token,
+        },
+        withCredentials: true,
+      }
+    );
+    return response;
+  } catch (err: any) {
+    console.log(err);
+    return err.response.data;
+  }
+};
