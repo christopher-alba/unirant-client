@@ -2,7 +2,7 @@ import { useAuth0 } from "@auth0/auth0-react";
 import { Formik } from "formik";
 import React, { FC, useContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Button, Input, Modal } from "semantic-ui-react";
+import { Button, Icon, Input, Modal } from "semantic-ui-react";
 import { fetchCurrentUserInWrapper } from "../../../api/auth";
 import { createCommunity, getAllCommunities } from "../../../api/community";
 import { fetchUserProfile } from "../../../api/profile";
@@ -51,7 +51,11 @@ const CreateCommunityModal: FC = () => {
       onClose={handleClose}
       onOpen={handleOpen}
       open={open}
-      trigger={<Button primary>Create Community</Button>}
+      trigger={
+        <Button primary icon labelPosition="right">
+          Create Community <Icon name="plus" />
+        </Button>
+      }
     >
       <Modal.Header>Create a new community.</Modal.Header>
       <Modal.Content>

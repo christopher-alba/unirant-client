@@ -35,7 +35,8 @@ export const StatusPillBasic = styled("div")`
   border: 2px solid ${({ theme }) => theme.colors.secondary};
   color: ${({ theme }) => theme.colors.secondary};
   width: fit-content;
-  display: inline;
+  display: inline-flex;
   margin-right: 10px;
   font-size: 0.8rem;
+  align-items: center;
 `;

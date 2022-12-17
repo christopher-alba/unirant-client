@@ -5,7 +5,7 @@ export type Community = {
   name: string;
   description?: string;
   adminIDs: string[];
-  creationDate: Date;
+  creationDate: string;
   memberIDs?: string[];
   wallpaper?: string;
 };

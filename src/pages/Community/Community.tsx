@@ -24,6 +24,7 @@ import {
 
 const Community: FC = () => {
   const [community, setCommunity] = useState<CommunityType>();
+  const [awaitingAPI, setAwaitingAPI] = useState(false);
   const { user, setUser } = useContext(AuthContext);
   const { setCommunities } = useContext(CommunityContext);
   const { getAccessTokenSilently, isLoading, user: auth0user } = useAuth0();
@@ -40,6 +41,7 @@ const Community: FC = () => {
   };
   const handleJoinCommunity = async () => {
     if (auth0user) {
+      setAwaitingAPI(true);
       const token = await getAccessTokenSilently();
       await joinCommunity(
         searchParams.get("id") as any,
@@ -49,6 +51,7 @@ const Community: FC = () => {
       setUser(await fetchCurrentUserInWrapper(token, auth0user));
       await fetchCommunity();
       setCommunities(await getAllCommunities());
+      setAwaitingAPI(false);
     } else {
       navigate("/login");
     }
@@ -56,6 +59,7 @@ const Community: FC = () => {
 
   const handleLeaveCommunity = async () => {
     if (auth0user) {
+      setAwaitingAPI(true);
       const token = await getAccessTokenSilently();
       await leaveCommunity(
         searchParams.get("id") as any,
@@ -65,6 +69,7 @@ const Community: FC = () => {
       setUser(await fetchCurrentUserInWrapper(token, auth0user));
       await fetchCommunity();
       setCommunities(await getAllCommunities());
+      setAwaitingAPI(false);
     } else {
       navigate("/login");
     }
@@ -77,7 +82,7 @@ const Community: FC = () => {
           {community.adminIDs.includes(user?._id as any) ? (
             <StyledButton
               color="red"
-              disabled={isLoading}
+              disabled={isLoading || awaitingAPI}
               onClick={handleLeaveCommunity}
             >
               Leave Group
@@ -85,7 +90,7 @@ const Community: FC = () => {
           ) : community.memberIDs?.includes(user?._id as any) ? (
             <StyledButton
               color="red"
-              disabled={isLoading}
+              disabled={isLoading || awaitingAPI}
               onClick={handleLeaveCommunity}
             >
               Leave Group
@@ -94,7 +99,7 @@ const Community: FC = () => {
             <StyledButton
               primary
               onClick={handleJoinCommunity}
-              disabled={isLoading}
+              disabled={isLoading || awaitingAPI}
             >
               Join Group
             </StyledButton>
