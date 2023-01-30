@@ -49,7 +49,7 @@ function App() {
         <ThemeProvider theme={selectedTheme}>
           <GlobalStyles />
           <Navbar setSelectedTheme={setSelectedTheme} />
-          <Container style={{ height: "100%" }}>
+          <Container>
             <Routes>
               <Route path="/" element={<Homepage />} />
               <Route path="/login" element={<Login />} />

@@ -213,17 +213,22 @@ const Navbar: FC<{
                 )}
               </div>
             ) : (
-              <Button.Group>
-                <Link to="/login">
-                  <Button tabIndex={-1}>Login</Button>
-                </Link>
-                <Button.Or text="OR" />
-                <Link to="/register">
-                  <Button tabIndex={-1} primary>
-                    Register
-                  </Button>
-                </Link>
-              </Button.Group>
+              <>
+                <ThemeButton onClick={toggleThemeChange}>
+                  Toggle Theme
+                </ThemeButton>
+                <Button.Group>
+                  <Link to="/login">
+                    <Button tabIndex={-1}>Login</Button>
+                  </Link>
+                  <Button.Or text="OR" />
+                  <Link to="/register">
+                    <Button tabIndex={-1} primary>
+                      Register
+                    </Button>
+                  </Link>
+                </Button.Group>
+              </>
             )}
           </NavContentWrapper>
         </InnerDiv>

@@ -19,7 +19,7 @@ export const StyledInput = styled(Input)`
 `;
 export const MainDiv = styled("div")`
   width: 100%;
-  height: 100%;
+  height: 100vh;
   flex-shrink: 1;
   display: flex;
   align-items: center;

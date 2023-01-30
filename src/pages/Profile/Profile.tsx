@@ -10,6 +10,7 @@ import {
 } from "../../components/StatusPills";
 import { StyledH1, StyledH3, StyledPHeading } from "../../components/Titles";
 import AuthContext, { UserInfo } from "../../contexts/AuthContext";
+import { HeadingWrapper } from "../Communities/styled";
 import {
   InfoPanel,
   ProfileBackgroundDiv,
@@ -56,7 +57,9 @@ const Profile: FC = () => {
   } else {
     return (
       <MainContentCard>
-        <StyledH1>Your Private Profile</StyledH1>
+        <HeadingWrapper>
+          <StyledH1>Your Private Profile</StyledH1>
+        </HeadingWrapper>
         <ProfileBackgroundDiv>
           <ProfilePicture
             src={
