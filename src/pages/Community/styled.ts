@@ -1,4 +1,3 @@
-import { Button } from "semantic-ui-react";
 import styled from "styled-components";
 
 export const HeaderWrapper = styled("div")`
@@ -54,7 +53,7 @@ export const MemberCount = styled("p")`
   color: ${({ theme }) => theme.colors.secondaryHover};
 `;
 
-export const StyledButton = styled(Button)`
+export const StyledButtonWrapper = styled("div")`
   position: absolute;
   right: 10px;
   bottom: 10px;

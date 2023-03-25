@@ -3,7 +3,11 @@ import AuthContext from "../../contexts/AuthContext";
 
 const Homepage: FC = () => {
   const { user } = useContext(AuthContext);
-  return <h1>Homepage. Welcome {user?.username}</h1>;
+  return (
+    <div>
+      <h1>Homepage. Welcome {user?.username}</h1>
+    </div>
+  );
 };
 
 export default Homepage;

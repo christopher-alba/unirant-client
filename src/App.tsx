@@ -16,14 +16,17 @@ import { Container } from "semantic-ui-react";
 import { useAuth0 } from "@auth0/auth0-react";
 import EditProfile from "./pages/EditProfile";
 import Communities from "./pages/Communities";
-import CommunityContext from "./contexts/CommunityContext";
+import CommunityContext, {
+  Community as CommunityType,
+} from "./contexts/CommunityContext";
 import Community from "./pages/Community";
+import Feed from "./pages/Feed";
 
 function App() {
   const [user, setUser] = useState<any>();
   const [fetchingUser, setFetchingUser] = useState(false);
   const [selectedTheme, setSelectedTheme] = useState(themes.light);
-  const [communities, setCommunities] = useState();
+  const [communities, setCommunities] = useState<CommunityType[]>();
 
   const { getAccessTokenSilently, user: auth0user, isLoading } = useAuth0();
   useEffect(() => {
@@ -69,6 +72,14 @@ function App() {
                 element={
                   <AuthWrapper>
                     <EditProfile />
+                  </AuthWrapper>
+                }
+              />
+              <Route
+                path="/feed"
+                element={
+                  <AuthWrapper>
+                    <Feed />
                   </AuthWrapper>
                 }
               />

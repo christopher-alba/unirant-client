@@ -1,5 +1,23 @@
 import React, { Dispatch, SetStateAction } from "react";
 
+export type CreatePostObj = {
+  title: string;
+  description: string;
+  images: string[];
+};
+
+export type Post = {
+  _id: string;
+  profileID: string;
+  title: string;
+  description: string;
+  likes: number;
+  dislikes: number;
+  images: string[];
+  creationDate: Date;
+  commentIDs: string[];
+};
+
 export type Community = {
   _id: string;
   name: string;
@@ -8,11 +26,12 @@ export type Community = {
   creationDate: string;
   memberIDs?: string[];
   wallpaper?: string;
+  posts?: Post[];
 };
 
 type CommunityContextType = {
   communities: Community[] | undefined;
-  setCommunities: Dispatch<SetStateAction<any>>;
+  setCommunities: Dispatch<SetStateAction<Community[] | undefined>>;
 };
 
 const CommunityContext = React.createContext<CommunityContextType>({
