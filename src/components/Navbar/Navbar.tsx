@@ -71,13 +71,12 @@ const Navbar: FC<{
     );
   };
 
-  const handleLogout = async () => {
+  const handleLogout = () => {
+    setUser(undefined);
+    setDropdownState(false);
     clientLogout({
       returnTo: window.location.origin + "/login",
     });
-
-    setUser(undefined);
-    setDropdownState(false);
   };
   const toggleThemeChange = () => {
     if (theme.name === "light") {

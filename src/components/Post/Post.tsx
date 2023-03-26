@@ -96,7 +96,12 @@ const Post: FC<{ post: PostType; setPosts: Function; posts: PostType[] }> = ({
       <LikeAndDislikeWrapper>
         <StyledButton
           onClick={handleLike}
-          disabled={awaitingAPI || disableLikeButton}
+          disabled={
+            awaitingAPI ||
+            disableLikeButton ||
+            user === undefined ||
+            typeof user === "string"
+          }
           active={userLikedPost()}
           likeOrDislike="like"
         >
@@ -105,7 +110,12 @@ const Post: FC<{ post: PostType; setPosts: Function; posts: PostType[] }> = ({
         {post.likesArray.length - post.dislikesArray.length}
         <StyledButton
           onClick={handleDislike}
-          disabled={awaitingAPI || disableDislikeButton}
+          disabled={
+            awaitingAPI ||
+            disableDislikeButton ||
+            user === undefined ||
+            typeof user === "string"
+          }
           active={userDislikedPost()}
           likeOrDislike="dislike"
         >

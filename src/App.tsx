@@ -25,7 +25,7 @@ import Feed from "./pages/Feed";
 import "react-responsive-carousel/lib/styles/carousel.min.css"; // requires a loader
 
 function App() {
-  const [user, setUser] = useState<any>();
+  const [user, setUser] = useState<any>(undefined);
   const [fetchingUser, setFetchingUser] = useState(false);
   const [selectedTheme, setSelectedTheme] = useState(themes.light);
   const [communities, setCommunities] = useState<CommunityType[]>();
@@ -42,8 +42,13 @@ function App() {
       const token = await getAccessTokenSilently().catch((err) =>
         console.log(err)
       );
+      const userResponse = await fetchCurrentUser(
+        setFetchingUser,
+        token,
+        auth0user
+      );
 
-      setUser(await fetchCurrentUser(setFetchingUser, token, auth0user));
+      setUser(userResponse);
     }
   };
   return (
