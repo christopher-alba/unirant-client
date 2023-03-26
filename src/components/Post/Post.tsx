@@ -30,7 +30,11 @@ const Post: FC<{ post: PostType; setPosts: Function; posts: PostType[] }> = ({
   const disableDislikeButton = (() => userLikedPost())();
   const handleLike = async () => {
     setAwaitingAPI(true);
-    let postCopy = { ...post };
+    let postCopy = {
+      _id: post._id,
+      likesArray: post.likesArray,
+      dislikesArray: post.dislikesArray,
+    };
     if (userDislikedPost()) {
       postCopy.dislikesArray = postCopy.dislikesArray.filter(
         (dislikeIDs) => dislikeIDs !== user?._id
@@ -48,7 +52,7 @@ const Post: FC<{ post: PostType; setPosts: Function; posts: PostType[] }> = ({
     setPosts(() => {
       return posts.map((postObj) => {
         if (postObj._id === post._id) {
-          return postCopy;
+          return { ...post, ...postCopy };
         } else {
           return postObj;
         }
@@ -58,7 +62,11 @@ const Post: FC<{ post: PostType; setPosts: Function; posts: PostType[] }> = ({
   };
   const handleDislike = async () => {
     setAwaitingAPI(true);
-    let postCopy = { ...post };
+    let postCopy = {
+      _id: post._id,
+      likesArray: post.likesArray,
+      dislikesArray: post.dislikesArray,
+    };
     if (userLikedPost()) {
       postCopy.likesArray = postCopy.likesArray.filter(
         (likeIDs) => likeIDs !== user?._id
@@ -75,7 +83,7 @@ const Post: FC<{ post: PostType; setPosts: Function; posts: PostType[] }> = ({
     setPosts(() => {
       return posts.map((postObj) => {
         if (postObj._id === post._id) {
-          return postCopy;
+          return { ...post, ...postCopy };
         } else {
           return postObj;
         }

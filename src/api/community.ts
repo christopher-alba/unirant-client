@@ -179,7 +179,16 @@ export const createCommunityPost = async (
   }
 };
 
-export const updateCommunityPost = async (post: Post, token: string) => {
+export const updateCommunityPost = async (
+  post:
+    | Post
+    | {
+        _id: string;
+        likesArray: string[];
+        dislikesArray: string[];
+      },
+  token: string
+) => {
   try {
     const response: AxiosResponse = await axios.post(
       originURL + "/api/v1/community/post/update",
