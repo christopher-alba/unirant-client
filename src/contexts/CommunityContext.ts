@@ -11,8 +11,8 @@ export type Post = {
   profileID: string;
   title: string;
   description: string;
-  likes: number;
-  dislikes: number;
+  likesArray: string[];
+  dislikesArray: string[];
   images: string[];
   creationDate: Date;
   commentIDs: string[];

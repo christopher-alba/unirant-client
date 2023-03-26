@@ -11,10 +11,11 @@ import {
   leaveCommunity,
 } from "../../api/community";
 import CreatePostModal from "../../components/Modals/CreatePostModal";
+import Post from "../../components/Post";
 import AuthContext from "../../contexts/AuthContext";
 import CommunityContext, {
   Community as CommunityType,
-  Post,
+  Post as PostType,
 } from "../../contexts/CommunityContext";
 import {
   HeaderWrapper,
@@ -28,7 +29,7 @@ import {
 
 const Community: FC = () => {
   const [community, setCommunity] = useState<CommunityType>();
-  const [posts, setPosts] = useState<Post[]>();
+  const [posts, setPosts] = useState<PostType[]>();
   const [awaitingAPI, setAwaitingAPI] = useState(false);
   const { user, setUser } = useContext(AuthContext);
   const { setCommunities } = useContext(CommunityContext);
@@ -141,7 +142,7 @@ const Community: FC = () => {
         </HeaderWrapper>
         <div>
           {posts?.map((post) => {
-            return <h1>{JSON.stringify(post)}</h1>;
+            return <Post post={post} setPosts={setPosts} posts={posts} />;
           })}
         </div>
       </>

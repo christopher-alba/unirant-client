@@ -22,6 +22,8 @@ import CommunityContext, {
 import Community from "./pages/Community";
 import Feed from "./pages/Feed";
 
+import "react-responsive-carousel/lib/styles/carousel.min.css"; // requires a loader
+
 function App() {
   const [user, setUser] = useState<any>();
   const [fetchingUser, setFetchingUser] = useState(false);

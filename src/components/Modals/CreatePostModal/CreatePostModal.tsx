@@ -25,7 +25,7 @@ const CreatePostModal: FC<{
   const navigate = useNavigate();
 
   const getBase64 = (file: File, cb: CallableFunction) => {
-    if (file.size > 1 * Math.pow(10, 6)) {
+    if (file.size > 5 * Math.pow(10, 6)) {
       console.log(file.size);
 
       setMessage("File is too large");

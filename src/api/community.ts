@@ -1,4 +1,4 @@
-import { CreatePostObj } from "./../contexts/CommunityContext";
+import { CreatePostObj, Post } from "./../contexts/CommunityContext";
 import { originURL } from "./origin";
 import axios, { AxiosResponse } from "axios";
 import { Community } from "../contexts/CommunityContext";
@@ -162,6 +162,28 @@ export const createCommunityPost = async (
       {
         communityID,
         profileID,
+        post,
+      },
+      {
+        headers: {
+          authorization: "Bearer " + token,
+        },
+        withCredentials: true,
+      }
+    );
+    console.log(response);
+    return response.data;
+  } catch (err: any) {
+    console.log(err);
+    throw new Error(err.response.data);
+  }
+};
+
+export const updateCommunityPost = async (post: Post, token: string) => {
+  try {
+    const response: AxiosResponse = await axios.post(
+      originURL + "/api/v1/community/post/update",
+      {
         post,
       },
       {
